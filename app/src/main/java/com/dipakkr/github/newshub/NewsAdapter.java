@@ -32,7 +32,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
             News newsList = getItem(position);
             TextView newsTitle = (TextView)newsItemView.findViewById(R.id.news_title);
 
-            newsTitle.setText(newsList.getMdetail());
+            newsTitle.setText(newsList.getmdetail());
         }
         return newsItemView;
 

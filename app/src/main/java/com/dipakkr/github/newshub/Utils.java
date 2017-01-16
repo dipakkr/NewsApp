@@ -1,10 +1,21 @@
 package com.dipakkr.github.newshub;
 
+import android.text.TextUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,7 +65,7 @@ public final class Utils {
 
             if(httpURLConnection.getResponseCode() == 200){
                 inputStream = httpURLConnection.getInputStream();
-                jsonResponse = readFromStream(jsonResponse);
+                jsonResponse = readFromStream(inputStream);
             }
         }catch (IOException e){
             e.printStackTrace();;
@@ -68,5 +79,42 @@ public final class Utils {
         }
         return jsonResponse;
     }
+    private static String readFromStream(InputStream inputStream) throws IOException{
+        StringBuilder output = new StringBuilder();
+        if (inputStream != null) {
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String line = reader.readLine();
+            while (line != null) {
+                output.append(line);
+                line = reader.readLine();
+            }
+        }
+        return output.toString();
+    }
+    private static  List<News> extractNewsData(String newsJson){
 
+        if (TextUtils.isEmpty(newsJson)) {
+            return null;
+        }
+        ArrayList<News> arrayList = new ArrayList<>();
+        try {
+            JSONObject jsonObject = new JSONObject(newsJson);
+            JSONArray articles = jsonObject.getJSONArray("articles");
+
+            for (int i =0; i<articles.length(); i++){
+                JSONObject newfeedjson = articles.getJSONObject(i);
+
+                String detail= newfeedjson.getString("title");
+                String Url = newfeedjson.getString("url");
+
+                News news = new News(detail,Url);
+                arrayList.add(news);
+            }
+
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return arrayList;
+    }
 }

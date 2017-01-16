@@ -6,14 +6,14 @@ package com.dipakkr.github.newshub;
 
 public class News {
     private final String mdetail;
-    public final String mUrl;
+    private final String mUrl;
 
     public  News(String detail,String Url){
         this.mdetail=detail;
         this.mUrl = Url;
     }
 
-    public String getMdetail() {
+    public String getmdetail() {
         return mdetail;
     }
 
