@@ -36,7 +36,7 @@ public final class Utils {
         }
         return url;
     }
-    private String makeHttpRequest(URL url) throws IOException{
+    private static String makeHttpRequest(URL url) throws IOException{
         String jsonResponse = null;
         if(url == null){
             return jsonResponse;
